@@ -31,6 +31,7 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import os
 import subprocess
+from spotify import Spotify
 
 mod = 'mod4'
 
@@ -61,7 +62,9 @@ def init_colors():
             ["#d08770", "#d08770"],  # color 13 desaturated red
             ["#ebcb8b", "#ebcb8b"],  # color 14 soft orange
             ["#a3be8c", "#a3be8c"],  # color 15 desaturated green
-            ["#b48ead", "#b48ead"]]  # color 16 grayish magenta
+            ["#b48ead", "#b48ead"], # color 16 grayish magenta
+            ["#1a53ff"] # color 17 blue
+            ]  
 
 
 colors = init_colors()
@@ -75,7 +78,7 @@ keys = [
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "k", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "i", lazy.layout.up(), desc="Move focus up"),
-    Key([mod], "space", lazy.layout.next(),
+    Key([mod], "Tab", lazy.layout.next(),
         desc="Move window focus to other window"),
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
@@ -106,7 +109,7 @@ keys = [
     ),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod], "q", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
@@ -165,10 +168,9 @@ for i in groups:
     )
 
 layouts = [
-    layout.Columns(border_focus=colors[10],  # "#26ed0c"
-                   border_normal=colors[4], border_width=2, margin=7, margin_on_single=20, border_on_single=True),
-    layout.Max(margin=20, border_on_single=True,
-               border_focus=colors[10], border_normal=colors[4]),
+    layout.Columns(border_focus=colors[14],  # "#26ed0c"
+                   border_normal=colors[4], border_width=3, margin=7, margin_on_single=20, border_on_single=False),
+    layout.Max(margin=20, border=colors[10]),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -198,7 +200,7 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.CurrentLayout(),
+                #widget.CurrentLayout(),
                 widget.GroupBox(
                     active=colors[10],  # b48ead
                     borderwidth=2,
@@ -217,6 +219,7 @@ screens = [
                 ),
                 widget.Prompt(),
                 widget.WindowName(),
+                Spotify(),
                 
                 widget.Systray(padding=10),
                 widget.Sep(
@@ -241,14 +244,14 @@ screens = [
                 # widget.StatusNotifier(),
 
                 # widget.Spacer(),
-                widget.Net(
-                    background=colors[1],
-                    fontsize=12,
-                    foreground=colors[5],
-                    format='{interface}: {down} ↓ ',
-                    interface='wlan0',
-                    padding=0
-                ),
+                # widget.Net(
+                #     background=colors[1],
+                #     fontsize=12,
+                #     foreground=colors[5],
+                #     format='{interface}: {down} ↓ ',
+                #     interface='wlan0',
+                #     padding=0
+                # ),
                 widget.Wlan(),
                 widget.Sep(
                     background=colors[1],
@@ -307,7 +310,7 @@ mouse = [
          start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(),
          start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.toggle_fullscreen()),
+    Click([mod], "Button1", lazy.window.toggle_fullscreen()),
     #Key([mod], "Button1", lazy.window.toggle_fullscreen())
 ]
 
